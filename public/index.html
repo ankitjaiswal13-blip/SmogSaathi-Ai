@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="SmogSaathi AI — Urban Air Quality Assistant with US AQI & India CPCB AQI scales, live Open-Meteo & demo snapshots, and English/Hindi support."
+  />
+  <title>SmogSaathi AI | Urban Air Quality Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content" data-i18n="skipToMain">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#top" class="brand" aria-label="SmogSaathi AI Home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+          </svg>
+        </span>
+        <span class="brand-text">
+          <strong>SmogSaathi AI</strong>
+          <small data-i18n="brandTagline">Urban Air Quality Assistant</small>
+        </span>
+      </a>
+
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary Navigation">
+        <a href="#aqi-checker" data-i18n="navCheckAir">Air Check</a>
+        <a href="#chatbot" data-i18n="navChatbot">AI Chatbot</a>
+        <a href="#routines" data-i18n="navRoutines">Routines</a>
+        <a href="#indoor" data-i18n="navIndoor">Indoor Air</a>
+        <a href="#modules" data-i18n="navModules">Modules</a>
+        <a href="#trust" data-i18n="navTrust">Data &amp; Security</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="lang-switch" role="group" aria-label="Language switcher">
+          <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" class="lang-btn" data-lang="hi" aria-pressed="false">हिं</button>
+        </div>
+
+        <button
+          type="button"
+          id="menu-toggle"
+          class="menu-toggle"
+          aria-expanded="false"
+          aria-controls="primary-nav"
+          aria-label="Toggle navigation menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section id="top" class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow" data-i18n="heroEyebrow">PromptWars Challenge 06 • Clean Air Companion</span>
+          <h1 data-i18n="heroTitle">Breathe Smarter in Every Urban Neighbourhood</h1>
+          <p class="hero-subtitle" data-i18n="heroSubtitle">
+            SmogSaathi AI turns complex air quality numbers into clear daily decisions — combining real AQI checks, Hindi &amp; English guidance, low-emission routines, and indoor protection.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="#aqi-checker" class="btn btn-primary" data-i18n="ctaCheckAir">Check City Air Quality</a>
+            <a href="#modules" class="btn btn-secondary" data-i18n="ctaExplore">Explore 5 Core Modules</a>
+          </div>
+
+          <ul class="trust-pills" aria-label="Core safeguards">
+            <li data-i18n="pillHonestData">Honest Live vs. Demo Labels</li>
+            <li data-i18n="pillCpcbScale">True US &amp; India CPCB Scales</li>
+            <li data-i18n="pillBilingual">English &amp; हिंदी Ready</li>
+          </ul>
+        </div>
+
+        <aside id="aqi-checker" class="aqi-card" aria-labelledby="aqi-card-title" aria-busy="false">
+          <div class="aqi-card-top">
+            <div>
+              <p class="card-kicker" data-i18n="cardKicker">Interactive Air Check</p>
+              <h2 id="aqi-card-title" data-i18n="cardTitle">City Air Quality Snapshot</h2>
+            </div>
+            <span id="source-badge" class="source-badge is-demo" data-i18n="badgeDemo">DEMO DATA</span>
+          </div>
+
+          <div class="controls-row">
+            <label class="field">
+              <span data-i18n="labelCity">City</span>
+              <select id="city-select" aria-label="Select city">
+                <option value="delhi">New Delhi</option>
+                <option value="mumbai">Mumbai</option>
+                <option value="bengaluru">Bengaluru</option>
+                <option value="lucknow">Lucknow</option>
+                <option value="kanpur">Kanpur</option>
+              </select>
+            </label>
+
+            <div class="field">
+              <span data-i18n="labelDataSource">Data Source</span>
+              <div class="mode-toggle" role="group" aria-label="Select data source">
+                <button type="button" class="mode-btn active" data-mode="demo" aria-pressed="true" data-i18n="modeDemo">Demo</button>
+                <button type="button" class="mode-btn" data-mode="live" aria-pressed="false" data-i18n="modeLive">Live API</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="scale-row">
+            <span class="scale-field-label" data-i18n="labelScale">AQI Scale (Separate Calculations)</span>
+            <div class="scale-toggle" role="group" aria-label="Select AQI scale">
+              <button type="button" class="scale-btn active" data-scale="us" aria-pressed="true" data-i18n="scaleUs">US AQI (EPA)</button>
+              <button type="button" class="scale-btn" data-scale="cpcb" aria-pressed="false" data-i18n="scaleCpcb">India CPCB (NAQI)</button>
+            </div>
+          </div>
+
+          <div id="aqi-status-banner" class="disclaimer-banner is-demo" role="status">
+            <strong id="scenario-title">Demo Scenario: Winter Morning Smog</strong>
+            <p id="source-disclaimer">DEMO DATA ONLY — Illustrative preset for testing, not a live sensor reading.</p>
+          </div>
+
+          <div id="aqi-loading-box" class="loading-box" hidden role="status" aria-live="polite">
+            <span class="spinner" aria-hidden="true"></span>
+            <span id="aqi-loading-text" data-i18n="loadingReading">Fetching air quality reading...</span>
+          </div>
+
+          <div id="aqi-error-box" class="error-box" hidden role="alert">
+            <p id="aqi-error-text"></p>
+            <div class="error-actions">
+              <button type="button" id="retry-aqi-btn" class="btn btn-small" data-i18n="btnRetry">
+                Retry
+              </button>
+              <button type="button" id="fallback-demo-btn" class="btn btn-small btn-small-outline" data-i18n="switchToDemo">
+                Switch to Demo Data
+              </button>
+            </div>
+          </div>
+
+          <div id="aqi-readout" class="aqi-readout">
+            <div class="aqi-score-block">
+              <div id="aqi-score-ring" class="aqi-score-ring level-unhealthy">
+                <span class="aqi-number" id="aqi-value">--</span>
+                <span class="aqi-unit" id="aqi-unit">US AQI</span>
+              </div>
+              <div class="aqi-meta">
+                <div class="category-row">
+                  <span id="aqi-category" class="category-pill">--</span>
+                  <span id="aqi-scale-pill" class="scale-pill">US EPA AQI</span>
+                </div>
+                <p id="aqi-advice" class="aqi-advice">Loading air quality guidance...</p>
+              </div>
+            </div>
+
+            <div class="source-meta-grid" aria-label="Source and observation details">
+              <div class="meta-item">
+                <span class="meta-label" data-i18n="labelProvider">Data Source</span>
+                <strong id="aqi-provider">--</strong>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label" data-i18n="labelObserved">Observation Time</span>
+                <strong id="aqi-observed">--</strong>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label" data-i18n="labelRefreshed">Last Refreshed</span>
+                <strong id="aqi-refreshed">--</strong>
+              </div>
+            </div>
+
+            <div id="cpcb-note-box" class="cpcb-note-box" hidden>
+              <p class="cpcb-dominant" id="cpcb-dominant">--</p>
+              <p class="cpcb-averaging" id="cpcb-averaging">--</p>
+              <p class="cpcb-subindices" id="cpcb-subindices">--</p>
+            </div>
+
+            <div class="pollutants-grid" aria-label="Pollutant breakdown">
+              <div class="pollutant-tile">
+                <span class="pollutant-name">PM2.5</span>
+                <strong id="val-pm25">--</strong>
+                <small>µg/m³</small>
+              </div>
+              <div class="pollutant-tile">
+                <span class="pollutant-name">PM10</span>
+                <strong id="val-pm10">--</strong>
+                <small>µg/m³</small>
+              </div>
+              <div class="pollutant-tile">
+                <span class="pollutant-name">NO₂</span>
+                <strong id="val-no2">--</strong>
+                <small>µg/m³</small>
+              </div>
+              <div class="pollutant-tile">
+                <span class="pollutant-name">O₃</span>
+                <strong id="val-o3">--</strong>
+                <small>µg/m³</small>
+              </div>
+              <div class="pollutant-tile">
+                <span class="pollutant-name">SO₂</span>
+                <strong id="val-so2">--</strong>
+                <small>µg/m³</small>
+              </div>
+              <div class="pollutant-tile">
+                <span class="pollutant-name">CO</span>
+                <strong id="val-co">--</strong>
+                <small>mg/m³</small>
+              </div>
+            </div>
+
+            <div class="card-footer-row">
+              <div class="refresh-group">
+                <button type="button" id="refresh-aqi-btn" class="btn btn-outline-dark" data-i18n="btnRefresh">
+                  Refresh Reading
+                </button>
+                <span id="fetch-status-pill" class="fetch-pill" aria-live="polite"></span>
+              </div>
+              <span id="server-status-pill" class="server-pill is-checking">Checking backend...</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="chatbot" class="section section-tinted" aria-labelledby="chatbot-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-kicker" data-i18n="chatKicker">Module 02 • AI Air-Quality Assistant</span>
+          <h2 id="chatbot-title" data-i18n="chatTitle">Ask SmogSaathi AI</h2>
+          <p data-i18n="chatSubtitle">
+            Get clear answers on AQI scales, PM2.5/PM10, N95 masks, outdoor exercise, low-emission commuting, and indoor clean air — grounded in your selected city snapshot.
+          </p>
+        </div>
+
+        <div class="chat-layout">
+          <aside class="chat-sidebar">
+            <div class="chat-info-card">
+              <div class="chat-info-head">
+                <span class="meta-label" data-i18n="chatModeLabel">AI Assistant Mode</span>
+                <span id="chat-ai-badge" class="source-badge is-demo" data-i18n="chatBadgeDemo">DEMO AI GUIDANCE</span>
+              </div>
+              <p id="chat-ai-note" class="chat-info-note" data-i18n="chatDemoNote">
+                No Gemini API key is configured on the server, so SmogSaathi is running its built-in Demo Guidance Engine (never pretending to be live AI).
+              </p>
+            </div>
+
+            <div class="chat-info-card">
+              <span class="meta-label" data-i18n="chatContextLabel">Attached City Context</span>
+              <p id="chat-context-pill" class="chat-context-pill" data-i18n="chatContextLoading">
+                Loading selected city AQI context...
+              </p>
+              <p class="chat-disclaimer-text" data-i18n="chatGeneralDisclaimer">
+                Responses separate your current city context (Demo or Modelled Live) from general air-quality guidance and are not medical advice.
+              </p>
+            </div>
+
+            <div class="chat-info-card">
+              <span class="meta-label" data-i18n="chatSuggestedLabel">Suggested Questions</span>
+              <div id="suggested-questions" class="suggested-list" aria-label="Suggested questions">
+                <button type="button" class="chip-btn" data-chip="walk" data-i18n="chipWalk">
+                  Is it safe for a morning walk right now?
+                </button>
+                <button type="button" class="chip-btn" data-chip="mask" data-i18n="chipMask">
+                  Which mask works best for PM2.5 and smog?
+                </button>
+                <button type="button" class="chip-btn" data-chip="commute" data-i18n="chipCommute">
+                  How can I make my daily commute lower-emission?
+                </button>
+                <button type="button" class="chip-btn" data-chip="indoor" data-i18n="chipIndoor">
+                  How do I reduce indoor air pollution at home?
+                </button>
+                <button type="button" class="chip-btn" data-chip="scales" data-i18n="chipScales">
+                  What is the difference between US AQI and India CPCB AQI?
+                </button>
+              </div>
+            </div>
+          </aside>
+
+          <div class="chat-panel">
+            <div class="chat-panel-header">
+              <div class="chat-agent-title">
+                <span class="chat-dot" aria-hidden="true"></span>
+                <div>
+                  <strong>SmogSaathi AI</strong>
+                  <small id="chat-provider-label" data-i18n="chatProviderDemo">Built-in Demo Guidance Engine</small>
+                </div>
+              </div>
+              <button type="button" id="clear-chat-btn" class="btn btn-small btn-small-outline" data-i18n="chatClearBtn">
+                Clear Chat
+              </button>
+            </div>
+
+            <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-label="Chat conversation">
+            </div>
+
+            <div id="chat-loading-bar" class="chat-loading" hidden role="status">
+              <span class="spinner" aria-hidden="true"></span>
+              <span data-i18n="chatLoadingText">Preparing air-quality guidance...</span>
+            </div>
+
+            <div id="chat-error-bar" class="error-box chat-error" hidden role="alert">
+              <p id="chat-error-text"></p>
+              <button type="button" id="chat-retry-btn" class="btn btn-small" data-i18n="btnRetry">Retry</button>
+            </div>
+
+            <form id="chat-form" class="chat-form" novalidate>
+              <label for="chat-input" class="skip-link" data-i18n="chatInputLabel">Ask an air-quality question</label>
+              <input
+                id="chat-input"
+                type="text"
+                maxlength="1000"
+                autocomplete="off"
+                placeholder="Ask about AQI, PM2.5, masks, commuting, or indoor air..."
+                data-i18n-placeholder="chatPlaceholder"
+              />
+              <button type="submit" id="chat-send-btn" class="btn btn-primary" data-i18n="chatSendBtn">
+                Send
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="routines" class="section" aria-labelledby="routines-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-kicker" data-i18n="routineKicker">Module 03 • Personalized Daily Planner</span>
+          <h2 id="routines-title" data-i18n="routineTitle">Low-Emission Daily Routines</h2>
+          <p data-i18n="routineSubtitle">
+            Pick your activity, preferred time, duration, and transport mode. SmogSaathi compares hourly pollution trends (Open-Meteo CAMS forecast or clearly labeled demo curves) to suggest cleaner windows and lower-emission alternatives.
+          </p>
+        </div>
+
+        <div class="routine-layout">
+          <form id="routine-form" class="routine-form-card" novalidate>
+            <div class="routine-form-head">
+              <h3 data-i18n="routineFormHeading">Your Routine Preferences</h3>
+              <span id="routine-source-sync" class="scale-pill">Demo Mode</span>
+            </div>
+
+            <div class="routine-fields">
+              <label class="field">
+                <span data-i18n="labelCity">City</span>
+                <select id="routine-city-select" aria-label="Routine city">
+                  <option value="delhi">New Delhi</option>
+                  <option value="mumbai">Mumbai</option>
+                  <option value="bengaluru">Bengaluru</option>
+                  <option value="lucknow">Lucknow</option>
+                  <option value="kanpur">Kanpur</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span data-i18n="labelActivity">Activity</span>
+                <select id="routine-activity" aria-label="Select activity">
+                  <option value="walking" data-i18n="actWalking">Walking</option>
+                  <option value="jogging" data-i18n="actJogging">Jogging / Running</option>
+                  <option value="school_commute" data-i18n="actSchool">School Commute</option>
+                  <option value="office_commute" data-i18n="actOffice">Office Commute</option>
+                  <option value="cycling" data-i18n="actCycling">Cycling</option>
+                  <option value="errands" data-i18n="actErrands">Daily Errands</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span data-i18n="labelPreferredTime">Preferred Time</span>
+                <select id="routine-time" aria-label="Preferred time window">
+                  <option value="morning" data-i18n="timeMorning">Morning (06:00–10:59)</option>
+                  <option value="midday" data-i18n="timeMidday">Midday (11:00–15:59)</option>
+                  <option value="evening" data-i18n="timeEvening">Evening (16:00–20:59)</option>
+                  <option value="night" data-i18n="timeNight">Night (21:00–23:59)</option>
+                  <option value="flexible" data-i18n="timeFlexible">Flexible Daytime (06:00–21:59)</option>
+                </select>
+              </label>
+
+              <div class="routine-two-col">
+                <label class="field">
+                  <span data-i18n="labelDuration">Duration</span>
+                  <select id="routine-duration" aria-label="Activity duration">
+                    <option value="15" data-i18n="dur15">15 mins</option>
+                    <option value="30" selected data-i18n="dur30">30 mins</option>
+                    <option value="45" data-i18n="dur45">45 mins</option>
+                    <option value="60" data-i18n="dur60">60 mins</option>
+                    <option value="90" data-i18n="dur90">90 mins</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span data-i18n="labelTransport">Transport Mode</span>
+                  <select id="routine-transport" aria-label="Current transport mode">
+                    <option value="walk" data-i18n="transWalk">Walking</option>
+                    <option value="cycle" data-i18n="transCycle">Bicycle</option>
+                    <option value="metro_bus" data-i18n="transMetro">Metro / Electric Bus</option>
+                    <option value="two_wheeler" data-i18n="transTwoWheeler">Two-Wheeler</option>
+                    <option value="car_cab" data-i18n="transCar">Car / Cab</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" id="routine-submit-btn" class="btn btn-primary routine-submit" data-i18n="btnPlanRoutine">
+              Build Routine Plan
+            </button>
+          </form>
+
+          <div class="routine-result-card" aria-live="polite">
+            <div class="routine-result-top">
+              <div>
+                <span class="meta-label" data-i18n="routineDataLabelTitle">Data Classification</span>
+                <p id="routine-data-note" class="routine-data-note">--</p>
+              </div>
+              <span id="routine-data-badge" class="source-badge is-demo">DEMO PRESET</span>
+            </div>
+
+            <div id="routine-loading-box" class="loading-box" hidden role="status">
+              <span class="spinner" aria-hidden="true"></span>
+              <span data-i18n="routineLoading">Evaluating hourly air-quality windows...</span>
+            </div>
+
+            <div id="routine-error-box" class="error-box" hidden role="alert">
+              <p id="routine-error-text"></p>
+              <div class="error-actions">
+                <button type="button" id="routine-retry-btn" class="btn btn-small" data-i18n="btnRetry">Retry</button>
+                <button type="button" id="routine-demo-btn" class="btn btn-small btn-small-outline" data-i18n="switchToDemo">
+                  Switch to Demo Data
+                </button>
+              </div>
+            </div>
+
+            <div id="routine-output">
+              <div id="routine-safety-banner" class="safety-banner is-warning" role="status">
+                <strong id="routine-safety-title">--</strong>
+                <p id="routine-safety-detail">--</p>
+              </div>
+
+              <div class="routine-window-box">
+                <div class="window-head">
+                  <span class="meta-label" data-i18n="routineBestWindowLabel">Lowest-Pollution Window</span>
+                  <strong id="routine-best-window" class="window-time-pill">--</strong>
+                </div>
+                <p id="routine-explanation" class="routine-explanation">--</p>
+              </div>
+
+              <div class="routine-transport-box">
+                <h4 data-i18n="routineTransportHeading">Low-Emission Transport &amp; Timing Tips</h4>
+                <ul id="routine-transport-list" class="routine-tips-list"></ul>
+              </div>
+
+              <div class="routine-timeline-wrap">
+                <div class="timeline-header">
+                  <span class="meta-label" data-i18n="routineTimelineHeading">Upcoming Hourly Trend (US AQI / PM2.5)</span>
+                  <span class="timeline-legend">
+                    <span class="legend-dot"></span>
+                    <span data-i18n="routineBestLegend">Lowest Window</span>
+                  </span>
+                </div>
+                <div id="routine-timeline" class="routine-timeline" role="list"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="indoor" class="section section-tinted" aria-labelledby="indoor-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-kicker" data-i18n="indoorKicker">Module 04 • Home Clean-Air Guide</span>
+          <h2 id="indoor-title" data-i18n="indoorTitle">Indoor Air Quality Recommendations</h2>
+          <p data-i18n="indoorSubtitle">
+            Tailored home ventilation, HEPA/DIY filtration, cooking exhaust, dust control, and smoke-reduction actions grounded in your selected city’s air quality.
+          </p>
+        </div>
+
+        <div class="indoor-controls-card">
+          <div class="indoor-controls-head">
+            <div class="indoor-context-meta">
+              <span class="meta-label" data-i18n="indoorContextLabel">Active Air-Quality Context</span>
+              <p id="indoor-context-summary" class="indoor-context-summary">--</p>
+            </div>
+            <span id="indoor-data-badge" class="source-badge is-demo">DEMO DATA</span>
+          </div>
+
+          <p id="indoor-data-note" class="indoor-data-note">--</p>
+
+          <div class="indoor-profile-grid">
+            <label class="field">
+              <span data-i18n="labelCity">City</span>
+              <select id="indoor-city-select" aria-label="Indoor recommendations city">
+                <option value="delhi">New Delhi</option>
+                <option value="mumbai">Mumbai</option>
+                <option value="bengaluru">Bengaluru</option>
+                <option value="lucknow">Lucknow</option>
+                <option value="kanpur">Kanpur</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span data-i18n="indoorPurifierLabel">HEPA Air Purifier</span>
+              <select id="indoor-purifier-select" aria-label="HEPA air purifier availability">
+                <option value="no" data-i18n="indoorPurifierNo">No (Show DIY &amp; Low-Cost Tips)</option>
+                <option value="yes" data-i18n="indoorPurifierYes">Yes (True HEPA Available)</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span data-i18n="indoorCookingLabel">Cooking Setup</span>
+              <select id="indoor-cooking-select" aria-label="Home cooking setup">
+                <option value="gas" data-i18n="indoorCookingGas">LPG / Gas Stove</option>
+                <option value="electric" data-i18n="indoorCookingElectric">Electric / Induction</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span data-i18n="indoorSensitiveLabel">Sensitive Residents</span>
+              <select id="indoor-sensitive-select" aria-label="Sensitive family members at home">
+                <option value="no" data-i18n="indoorSensitiveNo">None Specified</option>
+                <option value="yes" data-i18n="indoorSensitiveYes">Children, Elderly, or Asthma</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div id="indoor-loading-box" class="loading-box" hidden role="status">
+          <span class="spinner" aria-hidden="true"></span>
+          <span data-i18n="indoorLoading">Updating indoor recommendations...</span>
+        </div>
+
+        <div id="indoor-error-box" class="error-box" hidden role="alert">
+          <p id="indoor-error-text"></p>
+          <div class="error-actions">
+            <button type="button" id="indoor-retry-btn" class="btn btn-small" data-i18n="btnRetry">Retry</button>
+            <button type="button" id="indoor-demo-btn" class="btn btn-small btn-small-outline" data-i18n="switchToDemo">
+              Switch to Demo Data
+            </button>
+          </div>
+        </div>
+
+        <div id="indoor-output">
+          <div id="indoor-window-banner" class="safety-banner is-warning" role="status">
+            <strong id="indoor-window-title">--</strong>
+            <p id="indoor-window-detail">--</p>
+          </div>
+
+          <div id="indoor-cards-grid" class="indoor-cards-grid"></div>
+
+          <div class="checklist-card">
+            <div class="checklist-head">
+              <div>
+                <span class="meta-label" data-i18n="indoorChecklistKicker">Actionable Home Plan</span>
+                <h3 data-i18n="indoorChecklistTitle">Today’s Indoor Clean-Air Checklist</h3>
+              </div>
+              <div class="checklist-actions">
+                <span id="indoor-checklist-progress" class="server-pill is-connected">0 / 6</span>
+                <button type="button" id="indoor-reset-checks-btn" class="btn btn-small btn-small-outline" data-i18n="indoorResetChecks">
+                  Reset
+                </button>
+              </div>
+            </div>
+
+            <div class="checklist-progress-track" aria-hidden="true">
+              <div id="indoor-progress-fill" class="checklist-progress-fill" style="width: 0%"></div>
+            </div>
+
+            <div id="indoor-checklist-done-banner" class="checklist-done-banner" hidden role="status" data-i18n="indoorAllDoneText">
+              Great job! All indoor clean-air steps are completed for today.
+            </div>
+
+            <ul id="indoor-checklist" class="indoor-checklist"></ul>
+
+            <p id="indoor-general-disclaimer" class="indoor-disclaimer"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="modules" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-kicker" data-i18n="modulesKicker">Application Roadmap</span>
+          <h2 data-i18n="modulesTitle">Five Pillars of SmogSaathi AI</h2>
+          <p data-i18n="modulesSubtitle">
+            Built step-by-step with real backend logic. The homepage live/demo air check, US &amp; India CPCB scales, and bilingual UI are active now; the next milestones plug directly into this foundation.
+          </p>
+        </div>
+
+        <div class="modules-grid">
+          <article class="module-card is-active">
+            <div class="module-head">
+              <span class="module-step">01</span>
+              <span class="status-tag live-tag" data-i18n="tagActive">Active Now</span>
+            </div>
+            <h3 data-i18n="mod1Title">Air Quality Dashboard</h3>
+            <p data-i18n="mod1Desc">
+              Compare PM2.5, PM10, NO₂, O₃, SO₂, and CO across Indian cities with clear Demo vs. Live Open-Meteo data and separate US &amp; India CPCB scales.
+            </p>
+          </article>
+
+          <article class="module-card is-active">
+            <div class="module-head">
+              <span class="module-step">02</span>
+              <span class="status-tag live-tag" data-i18n="tagActive">Active Now</span>
+            </div>
+            <h3 data-i18n="mod2Title">AI Air-Quality Chatbot</h3>
+            <p data-i18n="mod2Desc">
+              Ask health, mask, and commute questions in English or Hindi. Powered securely via our server-side API route.
+            </p>
+          </article>
+
+          <article class="module-card is-active">
+            <div class="module-head">
+              <span class="module-step">03</span>
+              <span class="status-tag live-tag" data-i18n="tagActive">Active Now</span>
+            </div>
+            <h3 data-i18n="mod3Title">Low-Emission Daily Routines</h3>
+            <p data-i18n="mod3Desc">
+              Personalized morning walk, school run, metro/cycling, and errands timing based on hourly pollution dips.
+            </p>
+          </article>
+
+          <article class="module-card is-active">
+            <div class="module-head">
+              <span class="module-step">04</span>
+              <span class="status-tag live-tag" data-i18n="tagActive">Active Now</span>
+            </div>
+            <h3 data-i18n="mod4Title">Indoor Air Recommendations</h3>
+            <p data-i18n="mod4Desc">
+              Practical home checklists: safe window-opening hours, HEPA/DIY filtration, cooking exhaust, and indoor dust control.
+            </p>
+          </article>
+
+          <article class="module-card is-active">
+            <div class="module-head">
+              <span class="module-step">05</span>
+              <span class="status-tag live-tag" data-i18n="tagActive">Active Now</span>
+            </div>
+            <h3 data-i18n="mod5Title">Hindi &amp; English Support</h3>
+            <p data-i18n="mod5Desc">
+              Switch between English and हिंदी at any time using the top bar — every label, alert, and tip updates instantly.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="trust" class="section section-tinted">
+      <div class="container trust-grid">
+        <div class="trust-card">
+          <h3 data-i18n="trust1Title">Zero Invented Live Numbers</h3>
+          <p data-i18n="trust1Desc">
+            When you pick Demo mode, SmogSaathi clearly displays a DEMO DATA badge. When you pick Live API, our backend calls Open-Meteo directly and warns you honestly if the network is unavailable.
+          </p>
+        </div>
+        <div class="trust-card">
+          <h3 data-i18n="trust2Title">API Keys Stay on the Server</h3>
+          <p data-i18n="trust2Desc">
+            Your Gemini or third-party API keys live only in a git-ignored .env file on the Node.js server — never inside browser HTML or JavaScript files.
+          </p>
+        </div>
+        <div class="trust-card">
+          <h3 data-i18n="trust3Title">Mobile-First &amp; Beginner Friendly</h3>
+          <p data-i18n="trust3Desc">
+            Clean semantic HTML, modular CSS variables, and zero heavy build tools so you can read, customize, and test every line with confidence.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>SmogSaathi AI</strong>
+        <p data-i18n="footerTag">PromptWars Challenge 06 • Urban Air Quality Assistant</p>
+      </div>
+      <p class="footer-note" data-i18n="footerNote">
+        Live AQI powered by Open-Meteo Air Quality API • India CPCB AQI computed via official breakpoints.
+      </p>
+    </div>
+  </footer>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
