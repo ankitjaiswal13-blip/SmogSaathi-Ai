@@ -1,0 +1,27 @@
+{
+  "name": "smogsaathi-ai",
+  "version": "1.0.0",
+  "description": "SmogSaathi AI - Bilingual Urban Air Quality Assistant for PromptWars Challenge 06",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node -e \"import('node:fs').then(async fs=>{const {execFileSync}=await import('node:child_process');const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(d+'/'+e.name):e.name.endsWith('.js')?[d+'/'+e.name]:[]);for(const f of ['server.js',...walk('src'),...walk('public/js')])execFileSync(process.execPath,['--check',f],{stdio:'inherit'});})\"",
+    "build": "npm run check",
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [
+    "air-quality",
+    "aqi",
+    "cpcb",
+    "urban-health",
+    "bilingual",
+    "hindi",
+    "nodejs"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

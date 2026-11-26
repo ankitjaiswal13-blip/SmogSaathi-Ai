@@ -1,0 +1,15 @@
+# Environment variables & secrets (NEVER commit .env)
+.env
+.env.local
+.env.*.local
+
+# Dependencies, archives & logs
+node_modules/
+*.log
+*.zip
+npm-debug.log*
+
+# OS & editor files
+.DS_Store
+Thumbs.db
+.vscode/
